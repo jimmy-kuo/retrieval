@@ -41,7 +41,7 @@ namespace retrieval{
 
         FeatureIndex(int NumOfData){
                 _dimension = 1024; _nlist = 4*sqrt(NumOfData);
-                   _nprobe = 15; _groups = 64; _nbits = 8;
+                   _nprobe = 15; _groups = 32; _nbits = 8;
                 _quantizer = new faiss::IndexFlatL2(_dimension);
                     _index = new faiss::IndexIVFPQ(_quantizer, _dimension, _nlist, _groups, _nbits);
            _index->verbose = false;

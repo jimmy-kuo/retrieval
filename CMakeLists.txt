@@ -19,7 +19,6 @@ include_directories(
         /usr/local/include
         /usr/include
         /usr/local/cuda/include
-        /usr/local/cuda/include
 )
 
 link_directories(

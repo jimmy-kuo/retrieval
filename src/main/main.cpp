@@ -10,7 +10,7 @@ double elapsed ()
 
 int main() {
 
-    int dataCount = 1000000;
+    int dataCount = 10000000;
 
     /// Init FeatureIndex
     retrieval::FeatureIndex fea(dataCount);
@@ -19,14 +19,45 @@ int main() {
 
     float* data = new float[dataCount * dimension];
 
-    /// load data
-    FILE* file = fopen("../test/data_wendeng_108w_color", "rb");
-    if(!file){
-        std::cout<<"File Wrong"<<std::endl;
-        return 1;
+    /// calc num
+    int cou = 10;
+
+    /// load multi data
+    std::string inputFile = "/home/slh/vehicleIndex/data_float_2000000_";
+    for(int j=0;j<5;j++){
+        char s = '0' + j;
+        std::string name =  inputFile + s;
+        std::cout<<name<<std::endl;
+        FILE* file = fopen(name.c_str(), "rb");
+        if(!file){
+            std::cout<<"File Wrong"<<std::endl;
+            return 1;
+        }
+        fread(data + j*dataCount*dimension/5, sizeof(float), dataCount*dimension / 5, file);
+        fclose(file);
     }
-    fread(data, sizeof(float), dataCount * dimension, file);
-    fclose(file);
+
+    for(int k=1000000;k<1000100;k++){
+        std::cout<<data[k]<<" ";
+    }
+    std::cout<<std::endl;
+//    /// single file
+//    FILE* file = fopen("../test/data_wendeng_108w_color", "rb");
+//    if(!file){
+//        std::cout<<"File Wrong"<<std::endl;
+//        return 1;
+//    }
+//    fread(data, sizeof(float), dataCount / cou * dimension, file);
+//    fclose(file);
+
+//    /// circle reality
+//    for(int j=1;j<cou;j++){
+//        for(int k=0;k<dataCount/cou;k++) {
+//            for(int l=0;l<dimension;l++) {
+//                data[j * dataCount / cou * dimension + dataCount / cou * dimension + l] = data[dataCount / cou * dimension + l];
+//            }
+//        }
+//    }
 
     std::cout<<"File Done"<<std::endl;
 
@@ -38,7 +69,7 @@ int main() {
     if(! fea.isTrainIndex()){
 
         std::cout<<"Begin Train"<<std::endl;
-        fea.TrainIndex(dataCount, data);
+        fea.TrainIndex(dataCount/10, data);
 
     }
 
@@ -46,7 +77,7 @@ int main() {
 
     { /// I/O write
 
-        const char* outFileName = "index_IVFPQ";
+        const char* outFileName = "index_IVFPQ_10000000";
 
         fea.WriteIndexToFile(outFileName);
 
@@ -58,7 +89,8 @@ int main() {
 
         std::cout<<"Begin Add Data"<<std::endl;
 
-        fea.AddItemList(dataCount, data);
+        /// test for 5000000
+        fea.AddItemList(dataCount/2, data);
 
         std::cout<<"Add Data Done"<<std::endl;
 

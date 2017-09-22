@@ -14,14 +14,14 @@ double elapsed ()
 
 int main() {
 
-    int dataCount = 1080000;
+    int dataCount = 20000000;
 
     /// Init FeatureIndex
     retrieval::FeatureIndex fea;
 
     { /// I/O Read
 
-        const char* FileName = "index_IVFPQ";
+        const char* FileName = "index_IVFPQ_10000000";
 
         fea.ReadIndexFromFile(FileName);
 
@@ -35,13 +35,47 @@ int main() {
 
     float* data = new float[dataCount * dimension];
 
+    /// load multi data
+    std::string inputFile = "/home/slh/vehicleIndex/data_float_2000000_";
+    for(int j=0;j<5;j++){
+        char s = '0' + j;
+        std::string name =  inputFile + s;
+        std::cout<<name<<std::endl;
+        FILE* file = fopen(name.c_str(), "rb");
+        if(!file){
+            std::cout<<"File Wrong"<<std::endl;
+            return 1;
+        }
+        fread(data + j*dataCount* dimension/10, sizeof(float), dataCount* dimension / 10, file);
+        fclose(file);
+    }
+
+    for(int j=6;j<10;j++){
+        char s = '0' + j;
+        std::string name =  inputFile + s;
+        std::cout<<name<<std::endl;
+        FILE* file = fopen(name.c_str(), "rb");
+        if(!file){
+            std::cout<<"File Wrong"<<std::endl;
+            return 1;
+        }
+        fread(data + (j-1)*dataCount* dimension/10, sizeof(float), dataCount * dimension/ 10, file);
+        fclose(file);
+    }
+
+    for(int k=1000000;k<1000100;k++){
+        std::cout<<data[k]<<" ";
+    }
+    std::cout<<std::endl;
+
+
     /// load data
-    FILE* file = fopen("../test/data_wendeng_108w_color", "rb");
+    FILE* file = fopen("/home/slh/vehicleIndex/data_float_2000000_10", "rb");
     if(!file){
         std::cout<<"File Wrong"<<std::endl;
         return 1;
     }
-    fread(data, sizeof(float), dataCount * dimension, file);
+    fread(data +9*dataCount* dimension/10, sizeof(float), dataCount * dimension /10, file);
     fclose(file);
 
     std::cout<<"File Done"<<std::endl;
