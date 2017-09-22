@@ -1,3 +1,4 @@
+bin/index_*
 cmake-build-debug/
 .idea/
 test/
