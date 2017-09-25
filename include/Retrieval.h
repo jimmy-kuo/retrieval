@@ -39,7 +39,7 @@ namespace retrieval{
         /// Init FeatureIndex
         inline FeatureIndex(){ _index = NULL; _quantizer = NULL; }
 
-        FeatureIndex(int NumOfData){
+        FeatureIndex(long long NumOfData){
                 _dimension = 1024; _nlist = 4*sqrt(NumOfData);
                    _nprobe = 15; _groups = 32; _nbits = 8;
                 _quantizer = new faiss::IndexFlatL2(_dimension);

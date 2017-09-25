@@ -10,14 +10,14 @@ double elapsed ()
 
 int main() {
 
-    int dataCount = 10000000;
+    int dataCount = 20000000;
 
     /// Init FeatureIndex
     retrieval::FeatureIndex fea(dataCount);
 
     int dimension = fea.getDimension();
 
-    float* data = new float[dataCount * dimension];
+    float* data = (float*)malloc(sizeof(float)*20000000 * dimension);
 
     /// calc num
     int cou = 10;
@@ -33,14 +33,29 @@ int main() {
             std::cout<<"File Wrong"<<std::endl;
             return 1;
         }
-        fread(data + j*dataCount*dimension/5, sizeof(float), dataCount*dimension / 5, file);
+        fread(data+j*2000000*dimension, sizeof(float), 2000000*dimension, file);
         fclose(file);
     }
 
-    for(int k=1000000;k<1000100;k++){
-        std::cout<<data[k]<<" ";
+    for(int j=6;j<10;j++){
+        char s = '0' + j;
+        std::string name =  inputFile + s;
+        std::cout<<name<<std::endl;
+        FILE* file = fopen(name.c_str(), "rb");
+        if(!file){
+            std::cout<<"File Wrong"<<std::endl;
+            return 1;
+        }
+        fread(data+(j-1)*2000000*dimension, sizeof(float), 2000000*dimension, file);
+        fclose(file);
     }
-    std::cout<<std::endl;
+
+//    for(int k=6000000;k<6000010;k++){
+//        for(int j=0;j<1024;j++)
+//            std::cout<<*(data+k*1024+j)<<" ";
+//        std::cout<<std::endl;
+//    }
+//    std::cout<<std::endl;
 //    /// single file
 //    FILE* file = fopen("../test/data_wendeng_108w_color", "rb");
 //    if(!file){
@@ -69,10 +84,11 @@ int main() {
     if(! fea.isTrainIndex()){
 
         std::cout<<"Begin Train"<<std::endl;
-        fea.TrainIndex(dataCount/10, data);
+        fea.TrainIndex(dataCount, data);
 
     }
-
+//    int uiuiui;
+//    std::cin>>uiuiui;
     std::cout<<"Train Done"<<std::endl;
 
     { /// I/O write

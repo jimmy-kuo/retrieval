@@ -33,8 +33,7 @@ int main() {
 
     std::cout<<"Dimension is: "<< dimension << std::endl;
 
-    float* data = new float[dataCount * dimension];
-
+    float* data = (float*)malloc(sizeof(float)* dataCount *dimension);
     /// load multi data
     std::string inputFile = "/home/slh/vehicleIndex/data_float_2000000_";
     for(int j=0;j<5;j++){
@@ -46,7 +45,7 @@ int main() {
             std::cout<<"File Wrong"<<std::endl;
             return 1;
         }
-        fread(data + j*dataCount* dimension/10, sizeof(float), dataCount* dimension / 10, file);
+        fread(data + j*2000000*dimension, sizeof(float), 2000000* dimension , file);
         fclose(file);
     }
 
@@ -59,7 +58,7 @@ int main() {
             std::cout<<"File Wrong"<<std::endl;
             return 1;
         }
-        fread(data + (j-1)*dataCount* dimension/10, sizeof(float), dataCount * dimension/ 10, file);
+        fread(data + (j-1)*2000000*dimension, sizeof(float), 2000000 * dimension , file);
         fclose(file);
     }
 
