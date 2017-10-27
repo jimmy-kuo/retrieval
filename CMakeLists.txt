@@ -25,6 +25,8 @@ link_directories(
         ${PROJECT_SOURCE_DIR}/lib/
         ${PROJECT_SOURCE_DIR}/faiss/
         ${PROJECT_SOURCE_DIR}/faiss/gpu/
+        /usr/lib/x86_64-linux-gnu/
+        /usr/lib/mysql/
         /usr/lib/
         /usr/local/lib
 )

@@ -227,7 +227,7 @@ int get_num_gpus()
 #endif
 
 
-%include "utils.h"
+%include "retrieval.h"
 
 %include "Index.h"
 %include "Clustering.h"
