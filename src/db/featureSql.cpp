@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <cstdlib>
 #include "featureSql.h"
@@ -12,10 +13,44 @@ using namespace FeatureSQL;
 using namespace std;
 
 void FeatureSQL::FeatureSql::InitMapColor(std::string file, int count) {
+    std::ifstream vehicle_color (file, std::ios::in);
+    this->_id_map_color = new id_map_color[count];
+    for(int i=0;i<count;i++){
+        int temp;
+        vehicle_color >> temp >>_id_map_color[i].info ;
+    }
+    return ;
+}
+// 3000
+void FeatureSQL::FeatureSql::InitMapType(std::string file, int count) {
+    std::ifstream vehicle_type (file, std::ios::in);
+    this->_id_map_type = new id_map[count];
+    int temp;
+    while(cin>>temp){
+        vehicle_type >>_id_map_color[temp].info ;
+    }
     return ;
 }
 
-void FeatureSQL::FeatureSql::InitMapType(std::string file, int count) {
+void FeatureSQL::FeatureSql::InitPersonAttr(std::string file, int count) {
+    std::ifstream person_attr (file, std::ios::in);
+    int temp,a,b;
+    std::string name,name1,before="";
+    int num =0;
+    while(cin>>temp>>name>>a>>name1>>b){
+        if(before == "" || before != name){
+            std::string* te = new  std::string[20];
+            te[a] = name1;
+            _id_person_attr.insert(std::pair<std::string, std::string*>(name, te));
+            num ++;
+            before = name;
+            continue;
+
+        }else{
+            std::string* te = _id_person_attr[name];
+            te[a] = name1;
+        }
+    }
     return ;
 }
 
@@ -69,7 +104,7 @@ int* FeatureSQL::FeatureSql::searchWithUdType(std::string table, std::vector<std
                                               std::vector<std::string> relation, std::vector<int> id, int& row_count){
     // essemble table
     string sql = AssembleSQL(table, typeName, relation, id);
-
+    std::cout<<sql<<std::endl;
     if(sql == ""){
         row_count = 1;
         return NULL;
@@ -84,20 +119,33 @@ int* FeatureSQL::FeatureSql::searchWithUdType(std::string table, std::vector<std
 
 std::string FeatureSQL::FeatureSql::AssembleSQL(std::string table, std::vector<std::string> typeName,
                                                 std::vector<std::string> relation, std::vector<int> id){
-    if(typeName.size() != relation.size() || typeName.size() != id.size() || relation.size() != id.size()){
+    if(typeName.size() != relation.size()+1 || typeName.size() != id.size() || relation.size()+1 != id.size()){
         std::cout<<"SQL wrong, please check your query"<<std::endl;
         return "";
     }
     int size = typeName.size();
+    bool islabel = false;
     std::string sq = "select id from " + table + " where ";
     for(int j=0;j<size;j++){
         stringstream ss;
         ss << id[j];
-        sq += typeName[j] + "_id " + relation[j] + " " + ss.str();
-        if(j+1 == size){
-            sq += ";";
+        if(!islabel) {
+            sq += "(" + typeName[j] + " = " + ss.str();
+            islabel = true;
         }else{
-            sq += " and ";
+            sq += typeName[j] + " = " + ss.str();
+        }
+        if(j+1 == size){
+            if(islabel)
+                sq += ");";
+        }else{
+            if(relation[j] == "and" ){
+                islabel = false;
+                sq += " ) and ";
+            }else{
+                sq += " or ";
+            }
+
         }
     }
 

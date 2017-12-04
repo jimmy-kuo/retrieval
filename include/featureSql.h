@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
 #include <mysql/mysql.h>
 #include <string>
 
@@ -33,6 +34,8 @@ namespace FeatureSQL {
         /// disconstruct
         ~FeatureSql(){
             mysql_close( &_mysql );
+            delete[] _id_map_type;
+            delete[] _id_map_color;
         }
 
         /// search with Car Type
@@ -52,6 +55,15 @@ namespace FeatureSQL {
         /// Init ID map
         void InitMapType(std::string file, int count);
 
+        /// Init person map
+        void InitPersonAttr(std::string file, int count);
+
+        /// ID map color
+        id_map_color* _id_map_color;
+        /// ID map type
+        id_map* _id_map_type;
+        /// ID person Attr
+        std::map<std::string, std::string*> _id_person_attr;
     private:
         /// basic result handle
         int* HandleResult(MYSQL_RES* res, int& row_count);
@@ -60,10 +72,7 @@ namespace FeatureSQL {
                                 std::vector<int> id);
         /// 定义一个数据库连接句柄
         MYSQL _mysql;
-        /// ID map color
-        id_map_color* _id_map_color;
-        /// ID map type
-        id_map* _id_map_type;
+
     };
 
 }

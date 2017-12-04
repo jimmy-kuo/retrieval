@@ -16,6 +16,8 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
 include_directories(
         ${PROJECT_SOURCE_DIR}/include
         ${PROJECT_SOURCE_DIR}/faiss
+        ${PROJECT_SOURCE_DIR}/caffe/include
+        ${PROJECT_SOURCE_DIR}/caffe/build/include
         /usr/local/include
         /usr/include
         /usr/local/cuda/include
@@ -25,6 +27,7 @@ link_directories(
         ${PROJECT_SOURCE_DIR}/lib/
         ${PROJECT_SOURCE_DIR}/faiss/
         ${PROJECT_SOURCE_DIR}/faiss/gpu/
+        ${PROJECT_SOURCE_DIR}/caffe/build/lib/
         /usr/lib/x86_64-linux-gnu/
         /usr/lib/mysql/
         /usr/lib/
