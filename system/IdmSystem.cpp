@@ -22,8 +22,8 @@
 #include <string.h>
 #include <stdlib.h>
 
-std::string ROOT_DIR = "/home/slh/faiss_index/data/";
-std::string INPUT_DIR = "/home/slh/pro/searchFile/";
+std::string ROOT_DIR = "../data/";
+std::string INPUT_DIR = "/home/videouser/tmp/search/";
 // Model File
 std::string proto_file = ROOT_DIR + "car.prototxt";
 std::string proto_weight = ROOT_DIR + "car.caffemodel";
@@ -56,7 +56,7 @@ void ClientPersonThread(int client_sockfd, char* remote_addr,
 #define DATA_COUNT 1080000
 #define DATA_COUNT_PERSON 78978
 #define FEATURE_GPU 0
-#define FAISS_GPU 1
+#define FAISS_GPU 0
 #define FAISS_PERSON_GPU 1
 
 struct Info_String
@@ -258,8 +258,8 @@ void ClientVehicleThread(int client_sockfd, char* remote_addr,
         std::string result_path = "";
         // output the result
         std::vector<std::string> file_name_list;
-        std::string root_dir;
-        root_dir = "/home/slh/system/wd_all_1_new/";
+//        std::string root_dir;
+//        root_dir = "/home/slh/system/wd_all_1_new/";
         //root_dir = "/media/vehicle_res/person/out/";
 
         for (int i = 0; i < nq; i++) {
@@ -275,23 +275,23 @@ void ClientVehicleThread(int client_sockfd, char* remote_addr,
                     continue;
                 }
                 boost::split(file_name_list, tempInfo, boost::is_any_of(" ,!"), boost::token_compress_on);
-                cv::Mat im = cv::imread(root_dir + file_name_list[0]);
-                std::cout<<"root: "<<root_dir <<" "<< file_name_list[0]<<std::endl;
-                int x = atoi(file_name_list[1].c_str());
-                int y = atoi(file_name_list[2].c_str());
-                int width = atoi(file_name_list[3].c_str());
-                int height = atoi(file_name_list[4].c_str());
+//                cv::Mat im = cv::imread(root_dir + file_name_list[0]);
+                std::cout<<"root: " << file_name_list[0]<<std::endl;
+//                int x = atoi(file_name_list[1].c_str());
+//                int y = atoi(file_name_list[2].c_str());
+//                int width = atoi(file_name_list[3].c_str());
+//                int height = atoi(file_name_list[4].c_str());
                 //std::cout<<x<<y<<width<<height<<std::endl;
-                rectangle(im,cvPoint(x,y),cvPoint(x+width, y+height),cv::Scalar(0,0,255),3,1,0);
+//                rectangle(im,cvPoint(x,y),cvPoint(x+width, y+height),cv::Scalar(0,0,255),3,1,0);
                 //out im
-                IplImage qImg;
-                qImg = IplImage(im); // cv::Mat -> IplImage
+//                IplImage qImg;
+//                qImg = IplImage(im); // cv::Mat -> IplImage
                 char stemp[200];
                 int index_slash = file_name.find_last_of('/');
                 int index_dot = file_name.find_last_of('.');
                 file_name = file_name.substr(index_slash+1,index_dot- index_slash-1);
                 sprintf(stemp,"%s_%d.jpg",file_name.c_str(),j);
-                cvSaveImage(stemp,&qImg);
+//                cvSaveImage(stemp,&qImg);
                 result_path = result_path + stemp + ",";
             }
         }
@@ -376,17 +376,12 @@ void ClientPersonThread(int client_sockfd, char* remote_addr,
                     continue;
                 }
                 boost::split(file_name_list, tempInfo, boost::is_any_of(" ,!"), boost::token_compress_on);
-                cv::Mat im = cv::imread(root_dir + file_name_list[0]);
                 std::cout<<"root: "<<root_dir <<" "<< file_name_list[0]<<std::endl;
-                //out im
-                IplImage qImg;
-                qImg = IplImage(im); // cv::Mat -> IplImage
                 char stemp[200];
                 int index_slash = file_name.find_last_of('/');
                 int index_dot = file_name.find_last_of('.');
                 file_name = file_name.substr(index_slash+1,index_dot- index_slash-1);
                 sprintf(stemp,"%s_%d.jpg",file_name.c_str(),j);
-                cvSaveImage(stemp,&qImg);
                 result_path = result_path + stemp + ",";
             }
         }
