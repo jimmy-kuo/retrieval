@@ -1,0 +1,5 @@
+faiss/
+data/
+caffe/
+.idea/*
+cmake-build-debug/
