@@ -247,7 +247,7 @@ void ClientVehicleThread(int client_sockfd, char* remote_addr,
         // result return
         std::vector<faiss::Index::idx_t> nns (k * nq);
         std::vector<float>               dis (k * nq);
-        index->setNumProbes(Limit);
+        index->setNumProbes(1024);
         double t0 = elapsed();
         index->search(nq, data, k, dis.data(), nns.data());
         //index_person->search(nq, data, k, dis.data(), nns.data());
@@ -286,13 +286,8 @@ void ClientVehicleThread(int client_sockfd, char* remote_addr,
                 //out im
 //                IplImage qImg;
 //                qImg = IplImage(im); // cv::Mat -> IplImage
-                char stemp[200];
-                int index_slash = file_name.find_last_of('/');
-                int index_dot = file_name.find_last_of('.');
-                file_name = file_name.substr(index_slash+1,index_dot- index_slash-1);
-                sprintf(stemp,"%s_%d.jpg",file_name.c_str(),j);
-//                cvSaveImage(stemp,&qImg);
-                result_path = result_path + stemp + ",";
+
+                result_path = result_path + file_name_list[0] + ",";
             }
         }
 
@@ -355,7 +350,7 @@ void ClientPersonThread(int client_sockfd, char* remote_addr,
         // result return
         std::vector<faiss::Index::idx_t> nns (k * nq);
         std::vector<float>               dis (k * nq);
-        index_person->setNumProbes(Limit);
+        index_person->setNumProbes(1024);
 
         index_person->search(nq, data, k, dis.data(), nns.data());
         double t1 = elapsed();
@@ -377,12 +372,7 @@ void ClientPersonThread(int client_sockfd, char* remote_addr,
                 }
                 boost::split(file_name_list, tempInfo, boost::is_any_of(" ,!"), boost::token_compress_on);
                 std::cout<<"root: "<<root_dir <<" "<< file_name_list[0]<<std::endl;
-                char stemp[200];
-                int index_slash = file_name.find_last_of('/');
-                int index_dot = file_name.find_last_of('.');
-                file_name = file_name.substr(index_slash+1,index_dot- index_slash-1);
-                sprintf(stemp,"%s_%d.jpg",file_name.c_str(),j);
-                result_path = result_path + stemp + ",";
+                result_path = result_path + file_name_list[0] + ",";
             }
         }
 
