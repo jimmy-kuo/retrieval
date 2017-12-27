@@ -45,8 +45,14 @@ link_directories(
 #set(LIB_FEATURE_LIST feature.cpp)
 #add_library(feature SHARED ${LIB_FEATURE_LIST})
 
+set(LIB_BINARG_INDEX binary.cpp)
+add_library(binary SHARED ${LIB_BINARG_INDEX})
+
 set(SOURCE_SYSTEM IdmSystem.cpp)
 add_executable(IdmSystem ${SOURCE_SYSTEM})
+
+set(SOURCE_MAP_SYSTEM mapSystem.cpp)
+add_executable(mapSystem ${SOURCE_MAP_SYSTEM})
 
 target_link_libraries(
         IdmSystem
@@ -67,7 +73,25 @@ target_link_libraries(
         libcublas.so
 )
 
-
+target_link_libraries(
+        mapSystem
+        gpufaiss
+        libfaiss.a
+        libbinary.so
+        libfeature.so
+        pthread
+        libboost_system.so
+        libboost_filesystem.so
+        libboost_thread.so
+        libopencv_core.so
+        libopencv_imgcodecs.so
+        libopencv_imgproc.so
+        libopenblas.so.0
+        ${PROJECT_SOURCE_DIR}/caffe/build/lib/libcaffe.so
+        libglog.so
+        libcudart.so
+        libcublas.so
+)
 
 
 

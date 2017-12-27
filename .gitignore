@@ -3,3 +3,4 @@ data/
 caffe/
 .idea/*
 cmake-build-debug/
+map/
