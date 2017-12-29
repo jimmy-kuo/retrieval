@@ -29,11 +29,7 @@ namespace FeatureBinary {
     extern map<int, int> LabelList;
 
 
-    /*******************************************
-        SortTable:用于排序的数据结构
-        sum：纪录异或值
-        string：存储额外的info值
-    *******************************************/
+
     struct SortTable {
         int sum;
         int info;
@@ -56,21 +52,7 @@ namespace FeatureBinary {
     };
 
 
-    /******************************************
-        Feature:特征处理类
-        数据：
-            label：存放特征标签
-            data：存放按位分隔的数据数组
-            bytesize：存放数据的按位分隔大小
-        方法：
-            init(int size):
-                初始化方法，初始化bytesize和data的空间
-            void setData(int label, int* data):
-                Data变量的set函数
-            int* getData()：
-                Data变
-                量的get函数
-    *******************************************/
+  
     class feature {
     private:
         DataSet *Set;
