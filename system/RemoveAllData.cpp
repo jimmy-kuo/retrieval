@@ -18,16 +18,16 @@ using namespace std;
 using namespace feature_index;
 
 
-std::string ROOT_OTHER_FILE = "/home/slh/faiss_index/model/";
+std::string ROOT_OTHER_FILE = "../data/";
 // Person Model File
-std::string person_proto_file = ROOT_OTHER_FILE + "person.prototxt";
+std::string person_proto_file = ROOT_OTHER_FILE + "dperson.prototxt";
 std::string person_proto_weight = ROOT_OTHER_FILE + "person.caffemodel";
 // Binary Model File
 std::string binary_proto_file = ROOT_OTHER_FILE + "binary.prototxt";
 std::string binary_proto_weight = ROOT_OTHER_FILE + "binary.caffemodel";
 // car
-std::string car_proto_file = ROOT_OTHER_FILE + "deploy_google_multilabel.prototxt";
-std::string car_proto_weight = ROOT_OTHER_FILE + "wd_google_id_model_color_iter_100000.caffemodel";
+std::string car_proto_file = ROOT_OTHER_FILE + "dcar.prototxt";
+std::string car_proto_weight = ROOT_OTHER_FILE + "car.caffemodel";
 
 
 std::string file_list_name ="./file_list";
