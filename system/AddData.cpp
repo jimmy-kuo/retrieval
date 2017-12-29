@@ -57,10 +57,12 @@ int main(int argc,char** argv){
     int hasNum = cpu_index_person->ntotal;
     std::cout<<"This index has  : "<<hasNum<<" this script will append data behind it. please make sure."<<std::endl;
 
-    Info_String* info = new Info_String[hasNum + count];
-    FILE* _f = fopen(infoFile.c_str(), "rb");
-    fread(info, sizeof(Info_String), hasNum, _f);
-    fclose(_f);
+    Info_String *info = new Info_String[hasNum + count];
+    if(hasNum != 0) {
+        FILE *_f = fopen(infoFile.c_str(), "rb");
+        fread(info, sizeof(Info_String), hasNum, _f);
+        fclose(_f);
+    }
 
     std::vector<std::string> file_name_list;
     std::ofstream output(file_list_name,std::ios::out);
@@ -124,7 +126,7 @@ int main(int argc,char** argv){
         delete cpu_index;
     }
 
-    _f = fopen(infoFile.c_str(), "wb");
+    FILE* _f = fopen(infoFile.c_str(), "wb");
     fwrite(info, sizeof(Info_String), hasNum + count, _f);
     fclose(_f);
 

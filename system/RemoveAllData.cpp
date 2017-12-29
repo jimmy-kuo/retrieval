@@ -29,6 +29,9 @@ std::string binary_proto_weight = ROOT_OTHER_FILE + "binary.caffemodel";
 std::string car_proto_file = ROOT_OTHER_FILE + "dcar.prototxt";
 std::string car_proto_weight = ROOT_OTHER_FILE + "car.caffemodel";
 
+//
+std::string tmp_car = ROOT_OTHER_FILE + ".car";
+std::string tmp_person = ROOT_OTHER_FILE + ".person";
 
 std::string file_list_name ="./file_list";
 #define INPUT_PARAM 1
@@ -52,18 +55,34 @@ int main(int argc,char** argv){
         std::cout<<"Type Error: Only 'car', 'person' are supported."<<std::endl;
         return 1;
     }
-    faiss::Index* cpu_index_person = faiss::read_index(indexFile.c_str(), false);
-    int hasNum = cpu_index_person->ntotal;
+
+
+    faiss::Index* cpu_index;
+    if(type == "person"){
+        cpu_index = faiss::read_index(tmp_person.c_str(), false);
+    }else if(type == "car"){
+        cpu_index = faiss::read_index(tmp_car.c_str(), false);
+    }else{
+        std::cout<<"Type Error: Only 'car', 'person' are supported."<<std::endl;
+        return 1;
+    }
+
+    faiss::Index* cpu_index_real = faiss::read_index(indexFile.c_str(), false);
+    long hasNum = cpu_index_real->ntotal;
+    delete cpu_index_real;
     std::cout<<"This index has  : "<<hasNum<<" ,all will be deleted."<<std::endl;
 
     faiss::gpu::StandardGpuResources resources_person;
     faiss::gpu::GpuClonerOptions* options = new faiss::gpu::GpuClonerOptions();
     options->usePrecomputed = false;
     faiss::gpu::GpuIndexIVFPQ* index_person = dynamic_cast<faiss::gpu::GpuIndexIVFPQ*>(
-            faiss::gpu::index_cpu_to_gpu(&resources_person,GpuNum,cpu_index_person, options));
+            faiss::gpu::index_cpu_to_gpu(&resources_person, GpuNum, cpu_index, options));
 
-    faiss::IDSelector* ids = new faiss::IDSelectorRange(0, hasNum);
-    index_person->remove_ids(*ids);
+    std::string deleteIndex = "rm " + indexFile;
+    if(system(deleteIndex.c_str()) != 0 ){
+        std::cout<<"File modify failed, please make sure, you have the right to write this file. "<<std::endl;
+        return 1;
+    }
 
     { // I/O
         const char *outfilename = indexFile.c_str();
@@ -73,7 +92,10 @@ int main(int argc,char** argv){
     }
 
     std::string deletefile = "rm " + infoFile;
-    system(deletefile.c_str());
+    if(system(deletefile.c_str()) != 0 ){
+        std::cout<<"File modify failed, please make sure, you have the right to write this file. "<<std::endl;
+        return 1;
+    }
     printf ("done delete \n");
 
     return 0;
