@@ -36,7 +36,7 @@ int main(int argc,char** argv){
     google::InitGoogleLogging(argv[0]);
     FeatureIndex index = FeatureIndex();
 
-    if(argc <= 7 ){
+    if(argc < 7 ){
         std::cout<<"argc : "<<argc<<" is not enough"<<std::endl;
         return 1;
     }

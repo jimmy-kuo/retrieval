@@ -41,8 +41,26 @@ link_directories(
         /usr/local/lib
         ${PROJECT_SOURCE_DIR}/caffe/build/lib
 )
-
+add_executable(RemoveAllData RemoveAllData.cpp)
 add_executable(AddData AddData.cpp)
+target_link_libraries(
+        RemoveAllData
+        gpufaiss
+        libfaiss.a
+        libfeature.so
+        pthread
+        libboost_system.so
+        libboost_filesystem.so
+        libboost_thread.so
+        libopencv_core.so
+        libopencv_imgcodecs.so
+        libopencv_imgproc.so
+        libopenblas.so.0
+        ${PROJECT_SOURCE_DIR}/caffe/build/lib/libcaffe.so
+        libglog.so
+        libcudart.so
+        libcublas.so
+)
 target_link_libraries(
         AddData
         gpufaiss
