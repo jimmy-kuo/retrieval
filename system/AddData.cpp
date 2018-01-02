@@ -36,7 +36,7 @@ int main(int argc,char** argv){
     google::InitGoogleLogging(argv[0]);
     FeatureIndex index = FeatureIndex();
 
-    if(argc < 7 ){
+    if(argc <= 3 ){
         std::cout<<"argc : "<<argc<<" is not enough"<<std::endl;
         return 1;
     }
@@ -44,24 +44,49 @@ int main(int argc,char** argv){
     std::string type = argv[1];
     std::string indexFile = argv[2];
     std::string infoFile = argv[3];
-    std::string related_path = argv[4]; // end with /
-    std::string FileList = argv[5];
-    int count = atoi(argv[6]);
-    int GpuNum = atoi(argv[7]);
 
-    if(type != "person" && type != "car" && type != "binary"){
-        std::cout<<"Type Error: Only 'car', 'person' are supported."<<std::endl;
+    if( type != "num" && argc < 7){
+        std::cout<<"type wrong, 'num' is supported when argc has only three."<<std::endl;
         return 1;
     }
+
     faiss::Index* cpu_index_person = faiss::read_index(indexFile.c_str(), false);
     int hasNum = cpu_index_person->ntotal;
-    std::cout<<"This index has  : "<<hasNum<<" this script will append data behind it. please make sure."<<std::endl;
 
+
+    if( type == "num" && argc < 7){
+        Info_String *info = new Info_String[hasNum];
+        if(hasNum != 0) {
+            FILE *_f = fopen(infoFile.c_str(), "rb");
+            fread(info, sizeof(Info_String), hasNum, _f);
+            fclose(_f);
+        }
+        std::cout<<"This index has  : "<<hasNum<<std::endl;
+        std::cout<<"Last info in this index file:  "<< info[hasNum - 1].info<<std::endl;
+        return 1;
+    }
+
+    std::string related_path;
+    std::string FileList;
+    int count;
+    int GpuNum;
+    if(argc > 3){
+        related_path = argv[4]; // end with /
+        FileList = argv[5];
+        count = atoi(argv[6]);
+        GpuNum = atoi(argv[7]);
+    }
     Info_String *info = new Info_String[hasNum + count];
     if(hasNum != 0) {
         FILE *_f = fopen(infoFile.c_str(), "rb");
         fread(info, sizeof(Info_String), hasNum, _f);
         fclose(_f);
+    }
+
+    std::cout<<"This index has  : "<<hasNum<<" this script will append data behind it. please make sure."<<std::endl;
+    if(type != "person" && type != "car" && type != "binary"){
+        std::cout<<"Type Error: Only 'car', 'person' are supported."<<std::endl;
+        return 1;
     }
 
     std::vector<std::string> file_name_list;
@@ -76,7 +101,7 @@ int main(int argc,char** argv){
             return 1;
         }
         output<< related_path + "/" +  file_name_list[0]<<std::endl;
-        std:string tmp=file_name_list[0];
+        std::string tmp=file_name_list[0];
         for(int j=1;j<=INPUT_PARAM;j++){
             tmp +=" "+ file_name_list[j];
         }
